@@ -1,0 +1,102 @@
+html{
+    height: 100%;
+    overflow: hidden;
+}
+body{
+    width: 100%;
+    height: 100%;
+    padding: auto;
+    margin: auto;
+}
+.container{
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+    background-color: red;
+    justify-content: center;
+}
+.text-block{
+    display: flex;
+}
+.text-block__centered{
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.main{
+    display: flex;
+    flex-flow: column;
+    background-color: burlywood;
+}
+
+.main__score{
+    background-color: cadetblue;
+}
+.main__field{
+    flex: 1 0 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: chartreuse;
+    padding: 8px;
+}
+.main__rules{
+    background-color: darkgoldenrod;
+    flex-flow: column;
+}
+
+.game{
+    display: grid;
+    height: 100%;
+    width: 400px;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    grid-gap: 10px;
+    background-color: darkgray;
+    padding: 8px;
+}
+
+.game__block{
+    display: inline-flex;
+    border: 1px solid black;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5em;
+    font-weight: 800;
+}
+
+.game__block__2{
+    background-color: #4B4237;
+}
+.game__block__4{
+    background-color: #90712C;
+}
+.game__block__8{
+    background-color: #D5A021;
+}
+.game__block__16{
+    background-color: #E1C47D;
+}
+.game__block__32{
+    background-color: #E7D6AB;
+}
+.game__block__64{
+    background-color: #C9BFB7;
+}
+.game__block__128{
+    background-color: #A49694;
+}
+.game__block__256{
+    background-color: #5D4A6C;
+}
+.game__block__512{
+    background-color: #482C54;
+}
+.game__block__1024{
+    background-color: #3D1D48;
+}
+.game__block__2048{
+    background-color: #320E3B;
+}
