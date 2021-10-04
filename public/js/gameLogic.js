@@ -42,19 +42,21 @@ class GameLogic {
                 reverse = true;
                 break;
         }
-        // console.log('getPathIndex', 'i:', index, 'b', border, 'r', row, 'c', column);
+        console.log('getPathIndex', 'i:', index, 'b', border, 'r', row, 'c', column);
         let end = index;
         while(true){
+            const currentV = this.#gameField[end];
             const next = end + offsetRow + offsetColumn;
-            // console.log('next', next);
+            console.log('next', next);
             if (reverse && next < border){
                 break;
             }else if (!reverse && next > border){
                 break;
             }
-            end = next;
             const nextV = this.#gameField[next];
-            if (nextV !== 0){
+            if (currentV === nextV || nextV === 0){
+                end = next;
+            }else{
                 break;
             }
         }
@@ -71,6 +73,7 @@ class GameLogic {
             }
             
             const endIndex = this.#getPathIndex(startIndex, direction);
+            console.log(startIndex, endIndex);
             //движение блока дальше невозможно - перед ним другой не пустой блок
             if (startIndex === endIndex){
                 return;
