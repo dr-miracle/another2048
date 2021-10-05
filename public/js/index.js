@@ -32,6 +32,7 @@ const testInstance = [
     0, 0, 0, 0,
     4, 4, 2, 2
 ];
+//expect 0 0 8 4 in last row
 const logicInstance = new GameLogic(testInstance);
 // logicInstance.spawn();
 // logicInstance.spawn();
