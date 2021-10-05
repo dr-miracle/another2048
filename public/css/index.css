@@ -67,6 +67,11 @@ body{
     font-weight: 800;
 }
 
+.game__block__0{
+    background-color: whitesmoke;
+    color: transparent;
+}
+
 .game__block__2{
     background-color: #4B4237;
 }
