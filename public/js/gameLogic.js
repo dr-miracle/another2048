@@ -35,12 +35,13 @@ class GameLogic {
         const merged = conjArr
             .map((row) => {
                 const filtered = row
+                    .filter((v) => v !== 0)
                     .map((v, i, rowArr) => {
                         if (v === 0){
                             return v;
                         }
                         const next = i + 1;
-                        if (next > rowArr.length - 1){
+                        if (next > rowArr.length){
                             return v;
                         }
                         const nextV = rowArr[next];
@@ -61,6 +62,7 @@ class GameLogic {
                 return arr.concat(v);
             }, []);
         this.#gameField = final;
+        this.#score += score;
     }
     constructor(field) {
         this.#gameField = field ? field : new Array(this.#maxFieldSize).fill(0);
@@ -85,8 +87,9 @@ class GameLogic {
     }
     spawn(){
         const emptyBlocksIndexes = this.#getEmptyIndexes();
-        const randomIndex = Math.round(Math.random() * emptyBlocksIndexes.length);
+        const randomIndex = Math.floor(Math.random() * emptyBlocksIndexes.length);
         const emptyIndex = emptyBlocksIndexes[randomIndex];
+        console.log('spawned at', emptyIndex, emptyBlocksIndexes, randomIndex);
         this.#gameField[emptyIndex] = this.#min;
     }
 }
