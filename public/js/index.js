@@ -1,22 +1,3 @@
-function onKeyup(e){
-    const { key } = e;
-    console.log(key);
-    const gameEvent = keymap.get(key);
-    if (!gameEvent){
-        return;
-    }
-    const needSpawn = gameEvent.call(gameLogic);
-    console.log('needSpawn', needSpawn);
-    if (needSpawn){
-        gameLogic.spawn();
-    }
-    const currentScore = gameLogic.score();
-    const currentField = gameLogic.gameField();
-    printGameField();
-    updateGrid(currentField);
-    updateScore(currentScore);
-}
-
 const ids = {
     game: "game-field",
     score: "score",
@@ -24,9 +5,73 @@ const ids = {
     winBanner: "win-banner"
 }
 
+const testInstance = [
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0
+];
+// const testInstance = [
+//     0, 4, 4, 0,
+//     2, 0, 0, 2,
+//     4, 0, 0, 2,
+//     4, 4, 2, 2
+// ];
+//todo: проверить 2 0 0 2
+
+//4, 4, 2, 2
+//expect 0 0 8 4 in last row
+const gameLogic = new GameLogic(testInstance);
+const keymap = new Map([
+    ['ArrowUp', GameLogic.up],
+    ['ArrowRight', GameLogic.right],
+    ['ArrowDown', GameLogic.down],
+    ['ArrowLeft', GameLogic.left],
+]);
+
 const blockCss = "game__block game__block__";
 const game = document.getElementById(ids.game);
 const score = document.getElementById(ids.score);
+
+function onKeyup(e){
+    const { key } = e;
+    console.log(key);
+    const gameEvent = keymap.get(key);
+    console.log(gameEvent);
+    if (!gameEvent){
+        return;
+    }
+    const needSpawn = gameEvent.call(gameLogic);
+    console.log('needSpawn', needSpawn);
+    if (!needSpawn){
+        return;
+    }
+    const spawned = gameLogic.spawn();
+    if (spawned){
+        return updateView();
+    }
+    // const hasAnotherTurn = gameLogic.hasAnotherTurn();
+    // if (hasAnotherTurn){
+    //     return;
+    // }
+    // showFailBanner();
+}
+
+function failBanner(show){
+
+}
+
+function winBanner(show){
+
+}
+
+function updateView(){
+    const currentScore = gameLogic.score();
+    const currentField = gameLogic.gameField();
+    printGameField();
+    updateGrid(currentField);
+    updateScore(currentScore);
+}
 
 function updateGrid(field){
     const childrens = Array.from(game.children);
@@ -72,32 +117,8 @@ function printGameField(){
 function updateScore(s){
     score.innerText = s;
 }
-const testInstance = [
-    0, 0, 0, 0,
-    0, 0, 0, 0,
-    0, 0, 0, 0,
-    0, 0, 0, 0
-];
-// const testInstance = [
-//     0, 4, 4, 0,
-//     2, 0, 0, 2,
-//     4, 0, 0, 2,
-//     4, 4, 2, 2
-// ];
-//todo: проверить 2 0 0 2
-
-//4, 4, 2, 2
-//expect 0 0 8 4 in last row
-const gameLogic = new GameLogic(testInstance);
-
 
 this.onkeyup = onKeyup;
-const keymap = new Map([
-    ['ArrowUp', gameLogic.up],
-    ['ArrowRight', gameLogic.right],
-    ['ArrowDown', gameLogic.down],
-    ['ArrowLeft', gameLogic.left],
-]);
 
 window.onload = (e) => {
     gameLogic.spawn();

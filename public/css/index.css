@@ -40,6 +40,15 @@ body{
     align-items: center;
     background-color: chartreuse;
     padding: 8px;
+    z-index: 1;
+}
+.main__winner_banner{
+    z-index: -2;
+    background-color: thistle;
+}
+.main__fail_banner{
+    z-index: -1;
+    background-color: red;
 }
 .main__rules{
     background-color: darkgoldenrod;

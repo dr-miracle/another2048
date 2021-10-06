@@ -83,28 +83,38 @@ class GameLogic {
     constructor(field) {
         this.#gameField = field ? field : new Array(this.#maxFieldSize).fill(0);
     }
+    hasAnotherTurn(){
+        //заготовка
+        return true;
+    }
     score(){
         return this.#score;
     }
     gameField(){
         return this.#gameField;
     }
-    up(){
+    static up(){
         return this.#calculate('up');
     }
-    right(){
+    static right(){
         return this.#calculate('right');
     }
-    down(){
+    static down(){
         return this.#calculate('down');
     }
-    left(){
+    static left(){
         return this.#calculate('left');
     }
     spawn(){
         const emptyBlocksIndexes = this.#getEmptyIndexes();
+        const canSpawn = emptyBlocksIndexes.length !== 0;
+        if (!canSpawn){
+            return false;
+        }
         const randomIndex = Math.floor(Math.random() * emptyBlocksIndexes.length);
         const emptyIndex = emptyBlocksIndexes[randomIndex];
-        this.#gameField[emptyIndex] = this.#min;
+        const value = (Math.floor(Math.random() * 100)) > 5 ? this.#min : (this.#min * 2);
+        this.#gameField[emptyIndex] = value;
+        return true;
     }
 }
