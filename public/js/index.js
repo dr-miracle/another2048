@@ -5,8 +5,11 @@ function onKeyup(e){
     if (!gameEvent){
         return;
     }
-    gameEvent.call(gameLogic);
-    gameLogic.spawn();
+    const needSpawn = gameEvent.call(gameLogic);
+    console.log('needSpawn', needSpawn);
+    if (needSpawn){
+        gameLogic.spawn();
+    }
     const currentScore = gameLogic.score();
     const currentField = gameLogic.gameField();
     printGameField();

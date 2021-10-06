@@ -1,3 +1,4 @@
+//todo: сделать случайный выбор в spawn 2 или 4 (сейчас появляется только двойка)
 class GameLogic {
     #min = 2;
     #max = 2048;
@@ -6,7 +7,8 @@ class GameLogic {
     #gameField;
     #score = 0;
     #transpose(array){
-        return Object.keys(array[0])
+        const [ cols ] = array;
+        return Object.keys(cols)
                 .map(colNumber => array.map(rowNumber => rowNumber[colNumber]));
     }
     #getEmptyIndexes(){
@@ -16,6 +18,17 @@ class GameLogic {
             }
             return res;
         }, [])
+    }
+    #isMatrixEquals(oldArr, newArr){
+        const [ row ] = oldArr;
+        const isEqual = Object.keys(row)
+            .every((rowIndex) => {
+                const oldRow = oldArr[rowIndex];
+                const newRow = newArr[rowIndex];
+                return oldRow.every((v, i) => v === newRow[i]);
+            })
+        console.log(isEqual);
+        return isEqual;
     }
     #calculate(direction){
         let score = 0;
@@ -57,12 +70,15 @@ class GameLogic {
                 const zeroes = Array(this.#fieldSize - filtered.length).fill(0);
                 return leadingZeroes ? [...zeroes, ...filtered] : [...filtered, ...zeroes];
             });
-        const final = (requiredTranspose ? this.#transpose(merged) : merged)
+        const final = (requiredTranspose ? this.#transpose(merged) : merged);
+        const concated = final
             .reduce((arr, v) => {
                 return arr.concat(v);
             }, []);
-        this.#gameField = final;
+        const needSpawn = this.#isMatrixEquals(matrix, final);
+        this.#gameField = concated;
         this.#score += score;
+        return !needSpawn;
     }
     constructor(field) {
         this.#gameField = field ? field : new Array(this.#maxFieldSize).fill(0);
@@ -74,22 +90,21 @@ class GameLogic {
         return this.#gameField;
     }
     up(){
-        this.#calculate('up');
+        return this.#calculate('up');
     }
     right(){
-        this.#calculate('right');
+        return this.#calculate('right');
     }
     down(){
-        this.#calculate('down');
+        return this.#calculate('down');
     }
     left(){
-        this.#calculate('left');
+        return this.#calculate('left');
     }
     spawn(){
         const emptyBlocksIndexes = this.#getEmptyIndexes();
         const randomIndex = Math.floor(Math.random() * emptyBlocksIndexes.length);
         const emptyIndex = emptyBlocksIndexes[randomIndex];
-        console.log('spawned at', emptyIndex, emptyBlocksIndexes, randomIndex);
         this.#gameField[emptyIndex] = this.#min;
     }
 }
