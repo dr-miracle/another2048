@@ -17,11 +17,22 @@ const testInstance = [
 //     4, 0, 0, 2,
 //     4, 4, 2, 2
 // ];
+// const testInstance = [
+//     4, 4, 4, 2,
+//     16, 2, 16, 8,
+//     8, 32, 128, 16,
+//     2, 4, 16, 4
+// ];
+// const testInstance = [
+//     1024, 1024, 4, 2,
+//     16, 2, 16, 8,
+//     8, 32, 128, 16,
+//     2, 4, 16, 4
+// ];
 //todo: проверить 2 0 0 2
 
 //4, 4, 2, 2
 //expect 0 0 8 4 in last row
-const gameLogic = new GameLogic(testInstance);
 const keymap = new Map([
     ['ArrowUp', GameLogic.up],
     ['ArrowRight', GameLogic.right],
@@ -32,45 +43,59 @@ const keymap = new Map([
 const blockCss = "game__block game__block__";
 const game = document.getElementById(ids.game);
 const score = document.getElementById(ids.score);
+const failBanner = document.getElementById(ids.failBanner);
+const winBanner = document.getElementById(ids.winBanner);
+
+const gameLogic = new GameLogic(testInstance);
+populateGrid(testInstance);
 
 function onKeyup(e){
     const { key } = e;
     console.log(key);
     const gameEvent = keymap.get(key);
-    console.log(gameEvent);
     if (!gameEvent){
         return;
     }
-    const needSpawn = gameEvent.call(gameLogic);
-    console.log('needSpawn', needSpawn);
-    if (!needSpawn){
+    const hasDifference = gameEvent.call(gameLogic);
+    console.log('hasDifference', hasDifference);
+    if (!hasDifference){
         return;
     }
     const spawned = gameLogic.spawn();
     if (spawned){
         return updateView();
     }
-    // const hasAnotherTurn = gameLogic.hasAnotherTurn();
-    // if (hasAnotherTurn){
-    //     return;
-    // }
-    // showFailBanner();
+    const hasAnotherTurn = gameLogic.hasAnotherTurn();
+    if (hasAnotherTurn){
+        return;
+    }
+    displayFailBanner(true);
 }
 
-function failBanner(show){
-
+function onWindowLoad(e){
+    gameLogic.spawn();
+    gameLogic.spawn();
+    updateView();
 }
 
-function winBanner(show){
+function displayFailBanner(show){
+    console.log('fail');
+}
 
+function displayWinBanner(show){
+    console.log('win');
 }
 
 function updateView(){
     const currentScore = gameLogic.score();
     const currentField = gameLogic.gameField();
+    const currentMaxBlock = gameLogic.currentMaxBlock();
     printGameField();
     updateGrid(currentField);
     updateScore(currentScore);
+    if (currentMaxBlock >= gameLogic.max()){
+        displayWinBanner(true);
+    }
 }
 
 function updateGrid(field){
@@ -118,12 +143,10 @@ function updateScore(s){
     score.innerText = s;
 }
 
-this.onkeyup = onKeyup;
-
-window.onload = (e) => {
-    gameLogic.spawn();
-    gameLogic.spawn();
-    printGameField();
-    const currentField = gameLogic.gameField()
-    populateGrid(currentField);
+function reset(){
+    gameLogic.reset();
+    onWindowLoad();
 }
+
+this.onkeyup = onKeyup;
+this.onload = onWindowLoad;

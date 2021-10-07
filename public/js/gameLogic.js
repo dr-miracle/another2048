@@ -6,6 +6,7 @@ class GameLogic {
     #maxFieldSize = this.#fieldSize * this.#fieldSize;
     #gameField;
     #score = 0;
+    #maxBlock = 2;
     #transpose(array){
         const [ cols ] = array;
         return Object.keys(cols)
@@ -27,14 +28,10 @@ class GameLogic {
                 const newRow = newArr[rowIndex];
                 return oldRow.every((v, i) => v === newRow[i]);
             })
-        console.log(isEqual);
         return isEqual;
     }
-    #calculate(direction){
-        let score = 0;
-        const leadingZeroes = direction === "right" || direction === "down";
-        const requiredTranspose = direction === "up" || direction === "down";
-        const field = [...this.#gameField];
+    #getMatrix(arr, requiredTranspose){
+        const field = [...arr];
         
         const matrix = [...Array(this.#fieldSize).keys()]
             .reduce((r, rowIndex) => {
@@ -43,16 +40,20 @@ class GameLogic {
                 const row = field.slice(start, end);
                 r.push(row);
                 return r;
-            }, []) ;
-        const conjArr = requiredTranspose ? this.#transpose(matrix) : matrix;
-        const merged = conjArr
+            }, []);
+        return requiredTranspose ? this.#transpose(matrix) : matrix;
+    }
+    #calculate(direction){
+        let score = 0;
+        const requiredTranspose = direction === "up" || direction === "down";
+        const leadingZeroes = direction === "right" || direction === "down";
+
+        const matrix = this.#getMatrix(this.#gameField, requiredTranspose);
+        const merged = matrix
             .map((row) => {
                 const filtered = row
                     .filter((v) => v !== 0)
                     .map((v, i, rowArr) => {
-                        if (v === 0){
-                            return v;
-                        }
                         const next = i + 1;
                         if (next > rowArr.length){
                             return v;
@@ -60,8 +61,12 @@ class GameLogic {
                         const nextV = rowArr[next];
                         if (nextV === v){
                             rowArr[next] = 0;
-                            score += v * 2;
-                            return v * 2;
+                            const doubled = v * 2;
+                            score += doubled;
+                            if (doubled > this.#maxBlock){
+                                this.#maxBlock = doubled;
+                            }
+                            return doubled;
                         }else{
                             return v;
                         }
@@ -75,17 +80,64 @@ class GameLogic {
             .reduce((arr, v) => {
                 return arr.concat(v);
             }, []);
-        const needSpawn = this.#isMatrixEquals(matrix, final);
+        //произошло слияние блоков или блоки переместились в другом направлении
+        const hasDifference = !this.#isMatrixEquals(matrix, final);
         this.#gameField = concated;
         this.#score += score;
-        return !needSpawn;
+        return hasDifference;
     }
     constructor(field) {
-        this.#gameField = field ? field : new Array(this.#maxFieldSize).fill(0);
+        if (!field){
+            this.reset();
+        }else{
+            this.#gameField = field
+        }
+    }
+    reset(){
+        this.#gameField = new Array(this.#maxFieldSize).fill(0);
+        this.#score = 0;
+        this.#maxBlock = 2;
+    }
+    max(){
+        return this.#max;
+    }
+    currentMaxBlock(){
+        return this.#maxBlock;
     }
     hasAnotherTurn(){
-        //заготовка
-        return true;
+        let canMove = false;
+        const directions = ["up", "right", "down", "left"];
+        for(const direction of directions){
+            const requiredTranspose = direction === "up" || direction === "down";
+            if (canMove){
+                break;
+            }
+            const matrix = this.#getMatrix(this.#gameField, requiredTranspose);
+            for(const row of matrix){
+                if (canMove){
+                    break;
+                }
+                const filtered = row
+                    .filter((v) => v !== 0);
+                if (filtered.length  < 2){
+                    continue;
+                }
+                for(let i = 0; i < filtered.length; i++){
+                    const next = i + 1;
+                    if (next > filtered.length){
+                        break;
+                    }
+                    const v = filtered[i];
+                    const nextV = filtered[next];
+                    if (nextV === v){
+                        canMove = true;
+                        console.log(direction);
+                        break;
+                    }
+                }
+            }
+        }
+        return canMove;
     }
     score(){
         return this.#score;
