@@ -1,8 +1,12 @@
 const ids = {
     game: "game-field",
     score: "score",
-    failBanner: "fail-banner",
-    winBanner: "win-banner"
+    banner: {
+        id: "banner",
+        text: "banner-text",
+        resetButton: "banner-reset-button"
+    },
+    reset: "reset-button"
 }
 
 const testInstance = [
@@ -11,6 +15,12 @@ const testInstance = [
     0, 0, 0, 0,
     0, 0, 0, 0
 ];
+// const testInstance = [
+//     2, 4, 16, 8,
+//     4, 8, 128, 4,
+//     8, 64, 2, 256,
+//     4, 8, 16, 32
+// ];
 // const testInstance = [
 //     0, 4, 4, 0,
 //     2, 0, 0, 2,
@@ -41,10 +51,17 @@ const keymap = new Map([
 ]);
 
 const blockCss = "game__block game__block__";
+const bannerCss = {
+    base: "banner",
+    win: "banner__winner",
+    fail: "banner__fail"
+}
 const game = document.getElementById(ids.game);
 const score = document.getElementById(ids.score);
-const failBanner = document.getElementById(ids.failBanner);
-const winBanner = document.getElementById(ids.winBanner);
+const banner = document.getElementById(ids.banner.id);
+const bannerText = document.getElementById(ids.banner.text);
+const bannerResetButton = document.getElementById(ids.banner.resetButton);
+const resetButton = document.getElementById(ids.reset);
 
 const gameLogic = new GameLogic(testInstance);
 populateGrid(testInstance);
@@ -66,10 +83,11 @@ function onKeyup(e){
         return updateView();
     }
     const hasAnotherTurn = gameLogic.hasAnotherTurn();
+    console.log(hasAnotherTurn);
     if (hasAnotherTurn){
         return;
     }
-    displayFailBanner(true);
+    displayBanner(show = true, win = false);
 }
 
 function onWindowLoad(e){
@@ -78,12 +96,15 @@ function onWindowLoad(e){
     updateView();
 }
 
-function displayFailBanner(show){
-    console.log('fail');
-}
-
-function displayWinBanner(show){
-    console.log('win');
+function displayBanner(show, win){
+    let css = bannerCss.base;
+    if (show){
+        css += " " + (win ? bannerCss.win : bannerCss.fail);
+        const text = "Your best score: " + gameLogic.score();
+        bannerText.innerHTML = text;
+        // return banner.style.visibility = 'hidden';
+    }
+    banner.className = css;
 }
 
 function updateView(){
@@ -94,7 +115,7 @@ function updateView(){
     updateGrid(currentField);
     updateScore(currentScore);
     if (currentMaxBlock >= gameLogic.max()){
-        displayWinBanner(true);
+        displayBanner(show = true, win = true);
     }
 }
 
@@ -145,8 +166,11 @@ function updateScore(s){
 
 function reset(){
     gameLogic.reset();
+    displayBanner(show = false);
     onWindowLoad();
 }
 
 this.onkeyup = onKeyup;
 this.onload = onWindowLoad;
+bannerResetButton.addEventListener('click', reset);
+resetButton.addEventListener('click', reset);

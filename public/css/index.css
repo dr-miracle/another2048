@@ -10,60 +10,65 @@ body{
 }
 .container{
     display: flex;
+    background-color: rgb(223, 75, 75);
     flex-flow: column;
     height: 100%;
-    background-color: red;
-    justify-content: center;
-}
-.text-block{
-    display: flex;
-}
-.text-block__centered{
-    text-align: center;
-    align-items: center;
-    justify-content: center;
-}
-
-.main{
-    display: flex;
-    flex-flow: column;
-    background-color: burlywood;
-}
-
-.main__score{
-    background-color: cadetblue;
-}
-.main__field{
-    flex: 1 0 400px;
-    display: flex;
     justify-content: center;
     align-items: center;
-    background-color: chartreuse;
-    padding: 8px;
-    z-index: 1;
 }
-.main__winner_banner{
-    z-index: -2;
-    background-color: thistle;
+.container > * {
+    margin: 4px;
 }
-.main__fail_banner{
-    z-index: -1;
-    background-color: red;
+.container__game{
+    display: inline-flex;
+    width: 400px;
+    height: 400px;
 }
-.main__rules{
-    background-color: darkgoldenrod;
-    flex-flow: column;
+.container__score{
+    display: inline-flex;
+    flex: 0 1 1rem;
+    align-items: center;
 }
-
+.container__score > *{
+    margin: 4px;
+}
 .game{
     display: grid;
     height: 100%;
-    width: 400px;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(4, 1fr);
-    grid-gap: 10px;
+    grid-gap: 8px;
     background-color: darkgray;
     padding: 8px;
+    flex: 1;
+}
+.banner{
+    position: fixed;
+    width: 400px;
+    height: 400px;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.9;
+    background-color: seagreen;
+    visibility: collapse;
+    padding: 8px 0px;
+}
+.banner__text{
+    padding: 2%;
+    color: whitesmoke;
+    display: inline-flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+.banner__winner{
+    visibility: visible !important;
+    background-color: sandybrown;
+}
+.banner__fail{
+    visibility: visible !important;
+    background-color: rgb(88, 56, 129);
 }
 
 .game__block{
@@ -74,6 +79,8 @@ body{
     align-items: center;
     font-size: 2.5em;
     font-weight: 800;
+    font-family: 'Oxygen', sans-serif;
+    color:  whitesmoke;
 }
 
 .game__block__0{

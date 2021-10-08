@@ -9,25 +9,15 @@
 </head>
 <body>
     <div class="container">
-        <div class="main">
-            <div class="score text-block text-block__centered">
-                <p>Score: <b id="score">0</b></p>
-            </div>
-            <div class="main__field">
-                <div id="game-field" class="game">
-                </div>
-
-            </div>
-            <div class=" text-block text-block__centered main__rules">
-                <p>
-                    Rule 1
-                </p>
-                <p>
-                    Rule 2
-                </p>
-                <p>
-                    Rule 3
-                </p>
+        <div class="container__score">
+            <p>Score: <b id="score">0</b></p>
+            <button id="reset-button">Reset</button>
+        </div>
+        <div class="container__game">
+            <div id="game-field" class="game"></div>
+            <div id="banner" class="banner">
+                <div id="banner-text" class="banner__text">1111</div>
+                <button id="banner-reset-button">Reset</button>
             </div>
         </div>
     </div>
