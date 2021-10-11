@@ -117,7 +117,9 @@ body{
 }
 .game__block__1024{
     background-color: #3D1D48;
+    font-size: 2em;
 }
 .game__block__2048{
     background-color: #320E3B;
+    font-size: 2em;
 }
