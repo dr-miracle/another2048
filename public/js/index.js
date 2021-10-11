@@ -13,6 +13,6 @@ const gameLogic = new GameLogic(testInstance);
 populateGrid(testInstance);
 
 this.onkeyup = onKeyup;
-this.onload = onWindowLoad;
 document.getElementById(ids.banner.resetButton).addEventListener('click', onReset);
 document.getElementById(ids.reset).addEventListener('click', onReset);
+this.onload = onWindowLoad;

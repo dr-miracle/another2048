@@ -75,15 +75,17 @@ class GameLogic {
                 const zeroes = Array(this.#fieldSize - filtered.length).fill(0);
                 return leadingZeroes ? [...zeroes, ...filtered] : [...filtered, ...zeroes];
             });
-        const final = (requiredTranspose ? this.#transpose(merged) : merged);
-        const concated = final
-            .reduce((arr, v) => {
-                return arr.concat(v);
-            }, []);
         //произошло слияние блоков или блоки переместились в другом направлении
-        const hasDifference = !this.#isMatrixEquals(matrix, final);
-        this.#gameField = concated;
-        this.#score += score;
+        const hasDifference = !this.#isMatrixEquals(matrix, merged);
+        if (hasDifference){
+            const final = (requiredTranspose ? this.#transpose(merged) : merged);
+            const concated = final
+                .reduce((arr, v) => {
+                    return arr.concat(v);
+                }, []);
+            this.#gameField = concated;
+            this.#score += score;
+        }
         return hasDifference;
     }
     constructor(field) {
@@ -105,6 +107,12 @@ class GameLogic {
         return this.#maxBlock;
     }
     hasAnotherTurn(){
+        const emptyBlocksIndexes = this.#getEmptyIndexes();
+        const hasEmptyIndexes = emptyBlocksIndexes.length > 0;
+        //очевидно что можно двинуться в любом направлении
+        if (hasEmptyIndexes){
+            return true;
+        }
         let canMove = false;
         const directions = ["up", "right", "down", "left"];
         for(const direction of directions){
@@ -129,7 +137,7 @@ class GameLogic {
                     }
                     const v = filtered[i];
                     const nextV = filtered[next];
-                    if (nextV === v){
+                    if (nextV === v || nextV === 0){
                         canMove = true;
                         console.log(direction);
                         break;
@@ -165,7 +173,12 @@ class GameLogic {
         }
         const randomIndex = Math.floor(Math.random() * emptyBlocksIndexes.length);
         const emptyIndex = emptyBlocksIndexes[randomIndex];
-        const value = (Math.floor(Math.random() * 100)) > 5 ? this.#min : (this.#min * 2);
+        const isFirstSpawn = emptyBlocksIndexes.length >= this.#maxFieldSize - 2;
+        let value = (Math.floor(Math.random() * 100)) > 5 ? this.#min : (this.#min * 2);
+        //первые блоки всегда должны быть двойкой
+        if (isFirstSpawn){
+            value = this.#min;
+        }
         this.#gameField[emptyIndex] = value;
         return true;
     }
