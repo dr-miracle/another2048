@@ -1,23 +1,29 @@
+/* global GameLogic */
+
+// eslint-disable-next-line no-unused-vars
 const ids = {
-    game: "game-field",
-    score: "score",
-    banner: {
-        id: "banner",
-        text: "banner-text",
-        resetButton: "banner-reset-button"
-    },
-    reset: "reset-button"
-}
+  game: 'game-field',
+  score: 'score',
+  banner: {
+    id: 'banner',
+    text: 'banner-text',
+    resetButton: 'banner-reset-button',
+  },
+  reset: 'reset-button',
+};
+// eslint-disable-next-line no-unused-vars
 const keymap = new Map([
-    ['ArrowUp', GameLogic.up],
-    ['ArrowRight', GameLogic.right],
-    ['ArrowDown', GameLogic.down],
-    ['ArrowLeft', GameLogic.left],
+  ['ArrowUp', GameLogic.up],
+  ['ArrowRight', GameLogic.right],
+  ['ArrowDown', GameLogic.down],
+  ['ArrowLeft', GameLogic.left],
 ]);
 
-const blockCss = "game__block game__block__";
+// eslint-disable-next-line no-unused-vars
+const blockCss = 'game__block game__block__';
+// eslint-disable-next-line no-unused-vars
 const bannerCss = {
-    base: "banner",
-    win: "banner__winner",
-    fail: "banner__fail"
-}
+  base: 'banner',
+  win: 'banner__winner',
+  fail: 'banner__fail',
+};
